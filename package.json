@@ -1,0 +1,51 @@
+{
+  "name": "use-tensorflow",
+  "version": "0.1.0",
+  "description": "A React hook to use tensorflow.js easily",
+  "main": "index.min.js",
+  "scripts": {
+    "build": "webpack -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franciscop/use-tensorflow.git"
+  },
+  "keywords": [
+    "react",
+    "hook",
+    "camera",
+    "video",
+    "audio",
+    "stream"
+  ],
+  "author": "Francisco Presencia <public@francisco.io> (https://francisco.io/)",
+  "license": "MIT",
+  "files": [],
+  "bugs": {
+    "url": "https://github.com/franciscop/use-tensorflow/issues"
+  },
+  "homepage": "https://github.com/franciscop/use-tensorflow#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5",
+    "@babel/preset-react": "^7.0.0",
+    "@tensorflow-models/coco-ssd": "^2.0.0",
+    "@tensorflow-models/posenet": "^2.1.3",
+    "@tensorflow/tfjs": "^1.2.9",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "regenerator-runtime": "^0.12.1",
+    "uglify-es": "^3.1.3",
+    "use-async-effect": "^2.2.1",
+    "webpack": "^4.25.0",
+    "webpack-cli": "^3.1.2"
+  }
+}
