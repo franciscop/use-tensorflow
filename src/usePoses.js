@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useAsyncEffect from "use-async-effect";
 
 import useModel from "./useModel";
