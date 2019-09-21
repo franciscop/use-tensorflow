@@ -2,7 +2,7 @@
 
 A React hook for tensorflow.js to detect objects and poses easily:
 
-![Recognized output](./assets/output.png)
+![Recognized output](./assets/objects-output.png)
 
 ```js
 import React, { useRef } from "react";
@@ -37,14 +37,51 @@ The first argument is the image or video reference, and the second argument is t
 const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
 ```
 
+Using poses as well:
+
+![Recognized output](./assets/both-output.png)
+
+```js
+import React, { useRef } from "react";
+import { useObjects, usePoses } from "use-tensorflow";
+import { Box, Circle, Container } from "./components";
+
+export default () => {
+  const ref = useRef();
+  const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
+  const poses = usePoses(ref, { modelUrl: "/pose/model.json" });
+  return (
+    <Container>
+      <img ref={ref} src="/living-room.jpg" />
+      {poses.map(pose =>
+        Object.values(pose).map(({ left, top, score }) => (
+          <Circle left={left} top={top} color={score > 0.5 ? "blue" : "red"} />
+        ))
+      )}
+      {objects.map(({ left, top, width, height, label, score }) => (
+        <Box
+          left={left}
+          top={top}
+          width={width}
+          height={height}
+          label={label}
+          color={score > 0.5 ? "blue" : "red"}
+          score={score}
+        />
+      ))}
+    </Container>
+  );
+};
+```
+
 ## Realtime computer camera recognition
 
 To load a realtime video you can install `use-camera` and do:
 
 ```js
 import React from "react";
-import useObjects from "./useObjects";
 import useCamera from "use-camera";
+import { useObjects } from "use-tensorflow";
 import { Container, Box } from './components';
 
 export default () => {
@@ -93,8 +130,9 @@ useObjects(ref);
 An example with all the bounding boxes and the border color depending on the accuracy. We're using [Styled Components](https://www.styled-components.com/) here, but use any styling library you prefer:
 
 ```js
-import styled from 'styled-components';
+import styled from "styled-components";
 
+// See their implementations below
 export const Container = styled.div`
   position: relative;
 `;
@@ -102,7 +140,7 @@ export const Container = styled.div`
 export const Box = styled.div`
   border: 2px solid ${({ color }) => color || "red"};
   position: absolute;
-  border-radius: 6px;
+  border-radius: 4px;
   left: ${({ left }) => left}px;
   top: ${({ top }) => top}px;
   width: ${({ width }) => width}px;
@@ -123,14 +161,28 @@ export const Box = styled.div`
   &::before {
     content: "${({ label }) => label}";
     left: 0;
-    border-radius: 0 0 6px;
+    border-radius: 0 0 4px;
   }
 
   &::after {
     content: "${({ score }) => Math.round(score * 100)}%";
     right: 0;
-    border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 4px;
   }
+`;
+
+export const Circle = styled.div`
+  content: "";
+  background: ${({ color }) => color || "red"};
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: translate(-4px, -4px);
+  border-radius: 8px;
+  left: ${({ left }) => left}px;
+  top: ${({ top }) => top}px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
 `;
 ```
 
