@@ -1,6 +1,8 @@
 # use-tensorflow
 
-A beginner-oriented React hook for tensorflow.js. Now you can detect objects and poses easily. [See demo]():
+A beginner-oriented React hook for tensorflow.js. Now you can detect objects and poses easily:
+
+![Recognized output](./assets/output.png)
 
 ```js
 import React, { useRef } from "react";
@@ -28,8 +30,6 @@ export default () => {
   );
 };
 ```
-
-![Recognized output](./assets/output.png)
 
 The first argument is the image or video reference, and the second argument is the options for [tensorflow.js](https://www.tensorflow.org/js). [Loading local models](#loading-local-models):
 
