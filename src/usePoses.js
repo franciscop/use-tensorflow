@@ -17,12 +17,14 @@ const mapPoses = ({ keypoints }) => {
   return points;
 };
 
-export const usePoses = (ref, options = {}) => {
+export default (ref, options = {}) => {
   const [poses, setPoses] = useState([]);
   const model = useModel(posenet, options);
   useAsyncEffect(
     async () => {
       if (!model) return null;
+      if (!ref.current) return null;
+
       // const poses = [await model.estimateSinglePose(ref.current)];
       const poses = await model.estimateMultiplePoses(ref.current);
       requestAnimationFrame(() => {

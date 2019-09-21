@@ -1,6 +1,6 @@
 # use-tensorflow
 
-A beginner-oriented React hook for tensorflow.js. Now you can detect objects and poses easily:
+A React hook for tensorflow.js to detect objects and poses easily:
 
 ![Recognized output](./assets/output.png)
 
