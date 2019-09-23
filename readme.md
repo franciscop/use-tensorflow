@@ -35,14 +35,14 @@ export default () => {
 
 ## API
 
-Import either the default `useTensorflow` or one of the models:
+Import one of the models:
 
 ```js
 // Available models right now
-import useTensorflow, { usePoses, useObjects } from 'use-tensorflow';
+import { usePoses, useObjects } from 'use-tensorflow';
 ```
 
-The `useTensorflow` itself is more advanced, let's see first `usePoses` and `useObjects`. All the specific models follow the same structure:
+All the named imported models follow the same structure:
 
 ```js
 export default () => {
@@ -56,6 +56,7 @@ export default () => {
 - `config`: the configuration for the specific model in Tensorflow. See [Coco SSD example](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd#api).
   - `modelUrl`: where to load the model from. [You can load them locally](#loading-local-models) for better performance in dev.
 
+There's also a default export `useTensorflow`, but it's experimental by now.
 
 
 ## useObjects
@@ -170,7 +171,7 @@ Some more examples. These examples unfortunately don't load on Codesandbox, so y
 
 ### Loading local models
 
-For local development you very likely want to download the model that you are using and load it locally. I haven't found an easy way of doing this, so let's get scrappy:
+For local development you very likely want to download and load the model locally for speed. I haven't found an easy way of doing this, so let's get scrappy:
 
 `1.` Open the network requests in the browser and load the library without the `modelUrl`:
 
@@ -193,7 +194,7 @@ const poses = usePoses(ref, { modelUrl: "/poses/model.json" });
 
 ## Realtime camera recognition
 
-To load a realtime video you can install `use-camera` and do:
+To load a realtime video you can install [my library `use-camera`](https://github.com/franciscop/use-camera) and do:
 
 ```js
 import React from "react";
