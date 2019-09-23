@@ -31,48 +31,165 @@ export default () => {
 };
 ```
 
-The first argument is the image or video reference, and the second argument is the options for [tensorflow.js](https://www.tensorflow.org/js). [Loading local models](#loading-local-models):
+
+
+## API
+
+Import either the default `useTensorflow` or one of the models:
 
 ```js
-const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
+// Available models right now
+import useTensorflow, { usePoses, useObjects } from 'use-tensorflow';
 ```
 
-Using poses as well:
-
-![Recognized output](./assets/both-output.png)
+The `useTensorflow` itself is more advanced, let's see first `usePoses` and `useObjects`. All the specific models follow the same structure:
 
 ```js
-import React, { useRef } from "react";
-import { useObjects, usePoses } from "use-tensorflow";
-import { Box, Circle, Container } from "./components";
+export default () => {
+  const ref = useRef();
+  const detected = use{Name}(ref, config);
+  return ...;
+};
+```
+
+- `ref`: the reference for the image or video.
+- `config`: the configuration for the specific model in Tensorflow. See [Coco SSD example](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd#api).
+  - `modelUrl`: where to load the model from. [You can load them locally](#loading-local-models) for better performance in dev.
+
+
+
+## useObjects
+
+Detect objects in the image, including the label, position and score:
+
+```js
+import React, { useRef } from 'react';
+import { useObjects } from 'use-tensorflow';
 
 export default () => {
   const ref = useRef();
-  const objects = useObjects(ref);
-  const poses = usePoses(ref);
-  return (
-    <Container>
-      <img ref={ref} src="/living-room.jpg" />
-      {poses.map(pose =>
-        Object.values(pose).map(({ left, top, score }) => (
-          <Circle left={left} top={top} color={score > 0.5 ? "blue" : "red"} />
-        ))
-      )}
-      {objects.map(({ left, top, width, height, label, score }) => (
-        <Box
-          left={left}
-          top={top}
-          width={width}
-          height={height}
-          label={label}
-          color={score > 0.5 ? "blue" : "red"}
-          score={score}
-        />
-      ))}
-    </Container>
-  );
+  const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
+  console.log(objects);
+  return <img ref={ref} src="/living-room.jpg" />;
 };
 ```
+
+Output:
+
+```js
+[
+  {
+    "label": "chair",
+    "score": 0.8703018426895142,
+    "left": 681,
+    "top": 409,
+    "width": 101,
+    "height": 140
+  },
+  {
+    "label": "couch",
+    "score": 0.8127394318580627,
+    "left": 160,
+    "top": 335,
+    "width": 308,
+    "height": 140
+  },
+  ...
+]
+```
+
+## usePoses
+
+Using poses as well:
+
+```js
+import React, { useRef } from 'react';
+import { useObjects } from 'use-tensorflow';
+
+export default () => {
+  const ref = useRef();
+  const poses = usePoses(ref);
+  console.log(poses);
+  return <img ref={ref} src="/living-room.jpg" />;
+};
+```
+
+```js
+[
+  {
+    "nose": {
+      "label": "nose",
+      "left": 762,
+      "top": 299,
+      "score": 0.22580526769161224
+    },
+    "leftEye": {
+      "label": "leftEye",
+      "left": 758,
+      "top": 294,
+      "score": 0.24668794870376587
+    },
+    ...
+  },
+  ...
+]
+```
+
+All the keys are:
+
+- `nose`
+- `leftEye`
+- `rightEye`
+- `leftEar`
+- `rightEar`
+- `leftShoulder`
+- `rightShoulder`
+- `leftElbow`
+- `rightElbow`
+- `leftWrist`
+- `rightWrist`
+- `leftHip`
+- `rightHip`
+- `leftKnee`
+- `rightKnee`
+- `leftAnkle`
+- `rightAnkle`
+
+
+### useTensorflow
+
+This is too experimental right now, please read the code to see how it works for now under `src/useModel.js`.
+
+
+
+## Examples
+
+Some more examples. These examples unfortunately don't load on Codesandbox, so you'll have to install and load them locally for them to work (including loading the images locally to avoid CORS issues).
+
+
+
+### Loading local models
+
+For local development you very likely want to download the model that you are using and load it locally. I haven't found an easy way of doing this, so let's get scrappy:
+
+`1.` Open the network requests in the browser and load the library without the `modelUrl`:
+
+```js
+useObjects(ref);
+```
+
+`2.` Copy the `.json` file and all the related files into your `public` folder. Create a folder called `public/objects` and put it all there:
+
+![Folder organization example](./assets/folder.png)
+
+`3.` Point the `use{Name}` to these files from the public location:
+
+```js
+const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
+const poses = usePoses(ref, { modelUrl: "/poses/model.json" });
+```
+
+
 
 ## Realtime camera recognition
 
@@ -106,32 +223,8 @@ export default () => {
 };
 ```
 
-> Note: unfortunately this does *not* work well in Codesandbox, so no demo there
 
-## Loading local models
-
-For local development you very likely want to download the model that you are using and load it locally. I haven't found an easy way of doing this, so let's get scrappy:
-
-`1.` Open the network requests in the browser and load the library without the `modelUrl`:
-
-```js
-useObjects(ref);
-```
-
-`2.` Copy the `.json` file and all the related files into your `public` folder. Create a folder called `public/objects` and put it all there:
-
-![Folder organization example](./assets/folder.png)
-
-`3.` Point the `use{Name}` to these files from the public location:
-
-```js
-const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
-const poses = usePoses(ref, { modelUrl: "/poses/model.json" });
-```
-
-
-
-## Example: bounding boxes
+## Adding bounding boxes
 
 An example with all the bounding boxes and the border color depending on the accuracy. We're using [Styled Components](https://www.styled-components.com/) here, but use any styling library you prefer:
 
