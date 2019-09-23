@@ -48,8 +48,8 @@ import { Box, Circle, Container } from "./components";
 
 export default () => {
   const ref = useRef();
-  const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
-  const poses = usePoses(ref, { modelUrl: "/pose/model.json" });
+  const objects = useObjects(ref);
+  const poses = usePoses(ref);
   return (
     <Container>
       <img ref={ref} src="/living-room.jpg" />
@@ -74,7 +74,7 @@ export default () => {
 };
 ```
 
-## Realtime computer camera recognition
+## Realtime camera recognition
 
 To load a realtime video you can install `use-camera` and do:
 
@@ -122,6 +122,12 @@ useObjects(ref);
 
 ![Folder organization example](./assets/folder.png)
 
+`3.` Point the `use{Name}` to these files from the public location:
+
+```js
+const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
+const poses = usePoses(ref, { modelUrl: "/poses/model.json" });
+```
 
 
 
