@@ -15,7 +15,7 @@ const mapObjects = ({ score, bbox, ...obj }) => ({
 
 export default (ref, options) => {
   const img = useRef(null);
-  const [objects, setObjects] = useState([]);
+  const [objects, setObjects] = useState(null);
   const model = useModel(cocoSsd, options);
   useAsyncEffect(
     async isMounted => {

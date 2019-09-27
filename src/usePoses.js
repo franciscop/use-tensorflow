@@ -18,7 +18,7 @@ const mapPoses = ({ keypoints }) => {
 };
 
 export default (ref, options = {}) => {
-  const [poses, setPoses] = useState([]);
+  const [poses, setPoses] = useState(null);
   const model = useModel(posenet, options);
   useAsyncEffect(
     async () => {
