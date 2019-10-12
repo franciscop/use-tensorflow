@@ -107,7 +107,7 @@ Using poses as well:
 
 ```js
 import React, { useRef } from 'react';
-import { useObjects } from 'use-tensorflow';
+import { usePoses } from 'use-tensorflow';
 
 export default () => {
   const ref = useRef();
