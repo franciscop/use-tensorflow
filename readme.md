@@ -15,7 +15,7 @@ export default () => {
   return (
     <Container>
       <img ref={ref} src="/living-room.jpg" />
-      {objects && objects.map(({ left, top, width, height, label, score }) => (
+      {objects ? objects.map(({ left, top, width, height, label, score }) => (
         <Box
           left={left}
           top={top}
