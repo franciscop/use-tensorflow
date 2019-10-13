@@ -12,11 +12,10 @@ import { Container, Box } from './components';  // Find the implementation below
 export default () => {
   const ref = useRef(null);
   const objects = useObjects(ref);
-  if (!objects) return 'Loading...';
   return (
     <Container>
       <img ref={ref} src="/living-room.jpg" />
-      {objects.map(({ left, top, width, height, label, score }) => (
+      {objects && objects.map(({ left, top, width, height, label, score }) => (
         <Box
           left={left}
           top={top}
@@ -26,7 +25,7 @@ export default () => {
           color={score > 0.6 ? "blue" : "red"}
           score={score}
         />
-      ))}
+      )) : 'Loading...'}
     </Container>
   );
 };
@@ -203,12 +202,12 @@ To load a realtime video you can install [my library `use-camera`](https://githu
 import React from "react";
 import useCamera from "use-camera";
 import { useObjects } from "use-tensorflow";
-import { Container, Box } from './components';
+import { Container, Box } from "./components";
 
 export default () => {
   const ref = useCamera({ audio: false });
   const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
-  if (!objects) return 'Loading...';
+  if (!objects) return "Loading...";
   return (
     <Container>
       <video ref={ref} autoPlay width="640" height="480" />
@@ -241,14 +240,17 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const Box = styled.div`
+export const Box = styled.div.attrs(props => ({
+  style: {
+    left: `${props.left}px`,
+    top: `${props.top}px`,
+    width: `${props.width}px`,
+    height: `${props.height}px`
+  }
+}))`
   border: 2px solid ${({ color }) => color || "red"};
   position: absolute;
   border-radius: 4px;
-  left: ${({ left }) => left}px;
-  top: ${({ top }) => top}px;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
 
   &::before,
   &::after {

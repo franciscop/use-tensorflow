@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAsyncEffect from "use-async-effect";
 
+import useRefData from "./useRefData";
 import useModel from "./useModel";
 import * as posenet from "@tensorflow-models/posenet";
 
@@ -20,18 +21,18 @@ const mapPoses = ({ keypoints }) => {
 export default (ref, options = {}) => {
   const [poses, setPoses] = useState(null);
   const model = useModel(posenet, options);
+  const data = useRefData(ref);
   useAsyncEffect(
     async () => {
       if (!model) return null;
-      if (!ref.current) return null;
+      if (!data) return null;
 
-      // const poses = [await model.estimateSinglePose(ref.current)];
-      const poses = await model.estimateMultiplePoses(ref.current);
+      const poses = await model.estimateMultiplePoses(data);
       requestAnimationFrame(() => {
         setPoses(poses.map(mapPoses));
       });
     },
-    [model, poses]
+    [model, data, poses]
   );
   return poses;
 };

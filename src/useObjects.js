@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useAsyncEffect from "use-async-effect";
 
+import useRefData from "./useRefData";
 import useModel from "./useModel";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 
@@ -14,31 +15,22 @@ const mapObjects = ({ score, bbox, ...obj }) => ({
 });
 
 export default (ref, options) => {
-  const img = useRef(null);
   const [objects, setObjects] = useState(null);
   const model = useModel(cocoSsd, options);
+  const data = useRefData(ref);
   useAsyncEffect(
     async isMounted => {
       if (!model) return null;
-      if (!ref.current) return null;
+      if (!data) return null;
 
-      if (ref.current.nodeName === "IMG") {
-        // Skip if it's the same image to avoid doing empty work
-        if (img.current && img.current === ref.current.src) return;
-        img.current = ref.current.src;
-      } else if (img.current) {
-        // Clean up if the previous render was an image and now it's not
-        img.current = null;
-      }
-
-      const objects = await model.detect(ref.current);
+      const objects = await model.detect(data);
       if (!isMounted()) return;
       // Give it some breathing room between infinite loops
       requestAnimationFrame(() => {
         setObjects(objects.map(mapObjects));
       });
     },
-    [model, objects]
+    [model, data, objects]
   );
   return objects;
 };
