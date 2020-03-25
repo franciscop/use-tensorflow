@@ -71,7 +71,6 @@ export default () => {
   const ref = useRef();
   const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
   console.log(objects);
-  if (!objects) return 'Loading...';
   return <img ref={ref} src="/living-room.jpg" />;
 };
 ```
@@ -112,7 +111,6 @@ export default () => {
   const ref = useRef();
   const poses = usePoses(ref);
   console.log(poses);
-  if (!poses) return 'Loading...';
   return <img ref={ref} src="/living-room.jpg" />;
 };
 ```
@@ -207,11 +205,10 @@ import { Container, Box } from "./components";
 export default () => {
   const ref = useCamera({ audio: false });
   const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
-  if (!objects) return "Loading...";
   return (
     <Container>
       <video ref={ref} autoPlay width="640" height="480" />
-      {objects.map(({ left, top, width, height, label, score }) => (
+      {objects && objects.map(({ left, top, width, height, label, score }) => (
         <Box
           left={left}
           top={top}

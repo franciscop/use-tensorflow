@@ -44,11 +44,10 @@ const Box = styled.div`
 export default () => {
   const ref = useRef(null);
   const objects = useObjects(ref, { modelUrl: "/objects/model.json" });
-  if (!objects) return "Loading...";
   return (
     <Container>
       <img ref={ref} src="/living-room.jpg" />
-      {objects.map(({ left, top, width, height, label, score }) => (
+      {objects && objects.map(({ left, top, width, height, label, score }) => (
         <Box
           left={left}
           top={top}
