@@ -1,4 +1,4 @@
-# use-tensorflow
+# use-tensorflow [![npm install use-tensorflow](https://img.shields.io/badge/npm%20install-use--tensorflow-blue.svg)](https://www.npmjs.com/package/use-tensorflow) [![tests](https://github.com/franciscop/use-tensorflow/workflows/tests/badge.svg)](https://github.com/franciscop/use-tensorflow/actions) [![gzip size](https://img.badgesize.io/franciscop/use-tensorflow/master/index.min.js.svg?label=gzip&logo=&compression=gzip)](https://github.com/franciscop/use-tensorflow/blob/master/index.min.js)
 
 A React hook for tensorflow.js to detect objects and poses easily:
 
