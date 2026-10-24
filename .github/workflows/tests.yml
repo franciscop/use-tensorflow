@@ -17,6 +17,6 @@ jobs:
       - name: Run the linter
         run: bun run lint
       - name: Run the tests
-        run: bun test
+        run: bun run test
         env:
           CI: true

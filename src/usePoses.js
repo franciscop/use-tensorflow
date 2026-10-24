@@ -12,7 +12,7 @@ const mapPoses = ({ keypoints }) => {
       label: part,
       left: Math.floor(position.x),
       top: Math.floor(position.y),
-      score
+      score,
     };
   });
   return points;
@@ -22,17 +22,14 @@ export default (ref, options = {}) => {
   const [poses, setPoses] = useState(null);
   const model = useModel(posenet, options);
   const data = useRefData(ref);
-  useAsyncEffect(
-    async () => {
-      if (!model) return null;
-      if (!data) return null;
+  useAsyncEffect(async () => {
+    if (!model) return null;
+    if (!data) return null;
 
-      const poses = await model.estimateMultiplePoses(data);
-      requestAnimationFrame(() => {
-        setPoses(poses.map(mapPoses));
-      });
-    },
-    [model, data, poses]
-  );
+    const poses = await model.estimateMultiplePoses(data);
+    requestAnimationFrame(() => {
+      setPoses(poses.map(mapPoses));
+    });
+  }, [model, data, poses]);
   return poses;
 };

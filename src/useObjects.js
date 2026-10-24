@@ -11,7 +11,7 @@ const mapObjects = ({ score, bbox, ...obj }) => ({
   left: Math.floor(bbox[0]),
   top: Math.floor(bbox[1]),
   width: Math.floor(bbox[2]),
-  height: Math.floor(bbox[3])
+  height: Math.floor(bbox[3]),
 });
 
 export default (ref, options) => {
@@ -19,7 +19,7 @@ export default (ref, options) => {
   const model = useModel(cocoSsd, options);
   const data = useRefData(ref);
   useAsyncEffect(
-    async isMounted => {
+    async (isMounted) => {
       if (!model) return null;
       if (!data) return null;
 
@@ -30,7 +30,7 @@ export default (ref, options) => {
         setObjects(objects.map(mapObjects));
       });
     },
-    [model, data, objects]
+    [model, data, objects],
   );
   return objects;
 };
